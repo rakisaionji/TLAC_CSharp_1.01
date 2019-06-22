@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E4E098CB-C875-4D2C-BC78-C36574E24BDB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DivaHook</RootNamespace>
+    <AssemblyName>DivaHook</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.2</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EasyHook">
+      <HintPath>..\packages\EasyHook.2.7.6789\lib\net40\EasyHook.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Emulator\Assembly.cs" />
+    <Compile Include="Emulator\Components\CoinEmulator.cs" />
+    <Compile Include="Emulator\Components\StageManager.cs" />
+    <Compile Include="Emulator\Config\BindingAccessor.cs" />
+    <Compile Include="Emulator\Camera\CameraData.cs" />
+    <Compile Include="Emulator\Camera\CameraController.cs" />
+    <Compile Include="Emulator\Config\ConfigFile.cs" />
+    <Compile Include="Emulator\Config\DivaConfig.cs" />
+    <Compile Include="Emulator\Components\IEmulatorComponent.cs" />
+    <Compile Include="Emulator\Input\ControlBinding.cs" />
+    <Compile Include="Emulator\Input\Ds4\Ds4Button.cs" />
+    <Compile Include="Emulator\Input\Ds4\Ds4Device.cs" />
+    <Compile Include="Emulator\InputEmulator.cs" />
+    <Compile Include="Emulator\Input\Ds4\Ds4Helper.cs" />
+    <Compile Include="Emulator\Input\InputHelper.cs" />
+    <Compile Include="Emulator\Input\Keyboard.cs" />
+    <Compile Include="Emulator\Input\KeyboardState.cs" />
+    <Compile Include="Emulator\Input\Mouse.cs" />
+    <Compile Include="Emulator\Input\MouseState.cs" />
+    <Compile Include="Emulator\Config\KeyConfig.cs" />
+    <Compile Include="Emulator\Input\Keys.cs" />
+    <Compile Include="Emulator\Input\KeyState.cs" />
+    <Compile Include="Emulator\Components\JvsButtons.cs" />
+    <Compile Include="Emulator\Components\JvsEmulator.cs" />
+    <Compile Include="Emulator\Misc\MathHelper.cs" />
+    <Compile Include="Emulator\MemoryManipulator.cs" />
+    <Compile Include="Emulator\Misc\Point.cs" />
+    <Compile Include="Emulator\ProcessAccess.cs" />
+    <Compile Include="Emulator\Misc\Rectangle.cs" />
+    <Compile Include="Emulator\ThreadAccess.cs" />
+    <Compile Include="Emulator\Components\TouchPanelEmulator.cs" />
+    <Compile Include="Emulator\Components\TouchSliderEmulator.cs" />
+    <Compile Include="Emulator\Misc\Vector2.cs" />
+    <Compile Include="Injection\GlutCursor.cs" />
+    <Compile Include="Injection\InjectionHelper.cs" />
+    <Compile Include="Injection\InjectionEntryPoint.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Injection\ServerInterface.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Emulator\MemoryManipulator.Imports.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DS4WindowsApi-DS4WindowsApi\DS4WindowsApi\DS4WindowsApi.csproj">
+      <Project>{053ba093-2731-4118-80c5-a0cbcdec5da4}</Project>
+      <Name>DS4WindowsApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

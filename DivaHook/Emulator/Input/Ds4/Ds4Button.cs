@@ -1,0 +1,31 @@
+﻿namespace DivaHook.Emulator.Input.Ds4
+{
+    public enum Ds4Button
+    {
+        None,
+        Maru,
+        Batsu,
+        Shikaku,
+        Sankaku,
+        DpadRight,
+        DpadDown,
+        DpadLeft,
+        DpadUp,
+        Options,
+        Share,
+        PS,
+        R1,
+        L1,
+        R2,
+        L2,
+        R3,
+        L3,
+        LeftStickLeft,
+        LeftStickRight,
+        RightStickLeft,
+        RightStickRight,
+        TouchButton,
+        TouchLeft,
+        TouchRight,
+    }
+}
