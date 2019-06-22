@@ -56,10 +56,14 @@
     <Compile Include="Emulator\Assembly.cs" />
     <Compile Include="Emulator\Camera\CameraController.cs" />
     <Compile Include="Emulator\Camera\CameraData.cs" />
+    <Compile Include="Emulator\Components\FastLoader.cs" />
+    <Compile Include="Emulator\Components\GameState.cs" />
+    <Compile Include="Emulator\Components\PlayerDataManager.cs" />
     <Compile Include="Emulator\Config\BindingAccessor.cs" />
     <Compile Include="Emulator\Config\ConfigFile.cs" />
     <Compile Include="Emulator\Config\DivaConfig.cs" />
     <Compile Include="Emulator\Components\IEmulatorComponent.cs" />
+    <Compile Include="Emulator\Config\PlayerConfig.cs" />
     <Compile Include="Emulator\Input\ControlBinding.cs" />
     <Compile Include="Emulator\Input\Ds4\Ds4Button.cs" />
     <Compile Include="Emulator\Input\Ds4\Ds4Device.cs" />
@@ -89,9 +93,21 @@
     <Compile Include="Injection\InjectionEntryPoint.cs" />
     <Compile Include="Injection\ServerInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Emulator\MemoryManipulator.Imports.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

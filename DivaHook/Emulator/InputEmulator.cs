@@ -14,6 +14,8 @@ namespace DivaHook.Emulator
     {
         public static readonly KeyConfig KeyConfig = new KeyConfig();
 
+        public static readonly PlayerConfig PlayerConfig = new PlayerConfig();
+
         public static readonly TimeSpan InputUpdateInterval = TimeSpan.FromMilliseconds(1000.0 / 144.0);
 
         public static readonly TimeSpan ProcessActiveCheckInterval = TimeSpan.FromMilliseconds(350.0);
@@ -52,7 +54,8 @@ namespace DivaHook.Emulator
             emulatorComponents = new IEmulatorComponent[]
             {
                 JVSEmulator = new JvsEmulator(MemoryManipulator, KeyConfig),
-                new CoinEmulator(MemoryManipulator, KeyConfig),
+                new FastLoader(MemoryManipulator, KeyConfig),
+                new PlayerDataManager(MemoryManipulator, PlayerConfig),
                 new TouchSliderEmulator(MemoryManipulator, KeyConfig),
                 new TouchPanelEmulator(MemoryManipulator, KeyConfig),
             };

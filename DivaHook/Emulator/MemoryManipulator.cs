@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace DivaHook.Emulator
 {
     public partial class MemoryManipulator
     {
+        private const uint PAGE_EXECUTE_READWRITE = 0x40;
+
+        [DllImport(USER32_DLL)]
+        static extern bool ScreenToClient(IntPtr hWnd, out POINT lpPoint);
+
+        [DllImport(KERNEL32_DLL)]
+        public static extern bool VirtualProtect(IntPtr lpAddress, uint dwSize, uint flNewProtect, out uint lpflOldProtect);
+
         private const ProcessAccess PROCESS_ACCESS = ProcessAccess.PROCESS_VM_READ | ProcessAccess.PROCESS_VM_WRITE | ProcessAccess.PROCESS_VM_OPERATION;
 
         private static readonly Dictionary<IntPtr, int> ProcessIdCache = new Dictionary<IntPtr, int>(16);
@@ -221,15 +230,28 @@ namespace DivaHook.Emulator
             WriteProcessMemory((int)ProcessHandle, address, value, value.Length, ref bytesWritten);
         }
 
+        public void WritePatch(long address, byte[] value)
+        {
+            if (!IsAttached || address <= 0)
+                return;
+
+            uint oldProtect, bck;
+            int bytesWritten = 0;
+
+            VirtualProtect((IntPtr)address, (uint)value.Length, PAGE_EXECUTE_READWRITE, out oldProtect);
+            WriteProcessMemory((int)ProcessHandle, address, value, value.Length, ref bytesWritten);
+            VirtualProtect((IntPtr)address, (uint)value.Length, oldProtect, out bck);
+        }
+
         public void WriteByte(long address, byte value)
         {
             if (!IsAttached || address <= 0)
                 return;
 
-            int bytesWritten = 0;
+            // int bytesWritten = 0;
             byte[] buffer = { value };
 
-            WriteProcessMemory((int)ProcessHandle, address, buffer, buffer.Length, ref bytesWritten);
+            Write(address, buffer);
         }
 
         public void WriteInt16(long address, short value)
@@ -237,10 +259,10 @@ namespace DivaHook.Emulator
             if (!IsAttached || address <= 0)
                 return;
 
-            int bytesWritten = 0;
+            // int bytesWritten = 0;
             byte[] buffer = BitConverter.GetBytes(value);
 
-            WriteProcessMemory((int)ProcessHandle, address, buffer, buffer.Length, ref bytesWritten);
+            Write(address, buffer);
         }
 
         public void WriteInt32(long address, int value)
@@ -248,10 +270,10 @@ namespace DivaHook.Emulator
             if (!IsAttached || address <= 0)
                 return;
 
-            int bytesWritten = 0;
+            // int bytesWritten = 0;
             byte[] buffer = BitConverter.GetBytes(value);
 
-            WriteProcessMemory((int)ProcessHandle, address, buffer, buffer.Length, ref bytesWritten);
+            Write(address, buffer);
         }
 
         public void WriteInt64(long address, long value)
@@ -259,10 +281,10 @@ namespace DivaHook.Emulator
             if (!IsAttached || address <= 0)
                 return;
 
-            int bytesWritten = 0;
+            // int bytesWritten = 0;
             byte[] buffer = BitConverter.GetBytes(value);
 
-            WriteProcessMemory((int)ProcessHandle, address, buffer, buffer.Length, ref bytesWritten);
+            Write(address, buffer);
         }
 
         public void WriteSingle(long address, float value)
@@ -270,10 +292,10 @@ namespace DivaHook.Emulator
             if (!IsAttached || address <= 0)
                 return;
 
-            int bytesWritten = 0;
+            // int bytesWritten = 0;
             byte[] buffer = BitConverter.GetBytes(value);
 
-            WriteProcessMemory((int)ProcessHandle, address, buffer, buffer.Length, ref bytesWritten);
+            Write(address, buffer);
         }
 
         public void WriteDouble(long address, double value)
@@ -281,10 +303,10 @@ namespace DivaHook.Emulator
             if (!IsAttached || address <= 0)
                 return;
 
-            int bytesWritten = 0;
+            // int bytesWritten = 0;
             byte[] buffer = BitConverter.GetBytes(value);
 
-            WriteProcessMemory((int)ProcessHandle, address, buffer, buffer.Length, ref bytesWritten);
+            Write(address, buffer);
         }
 
         public int GetAsciiStringLength(long address)
