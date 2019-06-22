@@ -56,6 +56,7 @@ namespace DivaHook.Emulator
                 JVSEmulator = new JvsEmulator(MemoryManipulator, KeyConfig),
                 new FastLoader(MemoryManipulator, KeyConfig),
                 new PlayerDataManager(MemoryManipulator, PlayerConfig),
+                new PvModuleManager(MemoryManipulator, KeyConfig),
                 new TouchSliderEmulator(MemoryManipulator, KeyConfig),
                 new TouchPanelEmulator(MemoryManipulator, KeyConfig),
             };

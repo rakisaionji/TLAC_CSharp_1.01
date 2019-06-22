@@ -34,20 +34,20 @@ namespace DivaHook.Emulator.Components
 
         private const long CURRENT_SUB_STATE = 0x0000000140CEFABCL;
 
-        private const string DefaultName = "ＮＯ－ＮＡＭＥ";
+        // private const string DefaultName = "ＮＯ－ＮＡＭＥ";
         private byte[] PlayerNameValue;
-        private Int32 PlayerNameAddress;
-        private Int32 Level = 1;
-        private Int32 PlateId = 0;
-        private Int32 PlateEff = -1;
-        private Int32 VocaloidPoint = 0;
-        private Int32 SkinEquip = 0;
-        private Byte ActToggle = 1;
-        private Int32 ActVol = 100;
-        private Int32 ActSlideVol = 100;
-        private Int32 HpVol = 100;
-        private Int32 PasswordStatus = -1;
-        private Int32 PvSortKind = 2;
+        private int PlayerNameAddress;
+        private int Level = 1;
+        private int PlateId = 0;
+        private int PlateEff = -1;
+        private int VocaloidPoint = 0;
+        private int SkinEquip = 0;
+        private byte ActToggle = 1;
+        private int ActVol = 100;
+        private int ActSlideVol = 100;
+        private int HpVol = 100;
+        private int PasswordStatus = -1;
+        private int PvSortKind = 2;
 
         private int step = 0;
 
@@ -136,17 +136,17 @@ namespace DivaHook.Emulator.Components
 
         private void ReadPlayerData()
         {
-            Int32.TryParse(PlayerConfig.Level, out Level);
-            Int32.TryParse(PlayerConfig.SkinEquip, out SkinEquip);
-            Int32.TryParse(PlayerConfig.PlateId, out PlateId);
-            Int32.TryParse(PlayerConfig.PlateEff, out PlateEff);
-            Int32.TryParse(PlayerConfig.VocaloidPoint, out VocaloidPoint);
-            Byte.TryParse(PlayerConfig.ActToggle, out ActToggle);
-            Int32.TryParse(PlayerConfig.ActVol, out ActVol);
-            Int32.TryParse(PlayerConfig.ActSlideVol, out ActSlideVol);
-            Int32.TryParse(PlayerConfig.HpVol, out HpVol);
-            Int32.TryParse(PlayerConfig.PasswordStatus, out PasswordStatus);
-            Int32.TryParse(PlayerConfig.PvSortKind, out PvSortKind);
+            int.TryParse(PlayerConfig.Level, out Level);
+            int.TryParse(PlayerConfig.SkinEquip, out SkinEquip);
+            int.TryParse(PlayerConfig.PlateId, out PlateId);
+            int.TryParse(PlayerConfig.PlateEff, out PlateEff);
+            int.TryParse(PlayerConfig.VocaloidPoint, out VocaloidPoint);
+            byte.TryParse(PlayerConfig.ActToggle, out ActToggle);
+            int.TryParse(PlayerConfig.ActVol, out ActVol);
+            int.TryParse(PlayerConfig.ActSlideVol, out ActSlideVol);
+            int.TryParse(PlayerConfig.HpVol, out HpVol);
+            int.TryParse(PlayerConfig.PasswordStatus, out PasswordStatus);
+            int.TryParse(PlayerConfig.PvSortKind, out PvSortKind);
         }
 
         private void WritePlayerData()

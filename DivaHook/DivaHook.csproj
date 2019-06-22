@@ -59,6 +59,7 @@
     <Compile Include="Emulator\Components\FastLoader.cs" />
     <Compile Include="Emulator\Components\GameState.cs" />
     <Compile Include="Emulator\Components\PlayerDataManager.cs" />
+    <Compile Include="Emulator\Components\PvModuleManager.cs" />
     <Compile Include="Emulator\Config\BindingAccessor.cs" />
     <Compile Include="Emulator\Config\ConfigFile.cs" />
     <Compile Include="Emulator\Config\DivaConfig.cs" />
