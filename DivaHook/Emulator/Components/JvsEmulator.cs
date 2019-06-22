@@ -7,9 +7,7 @@ namespace DivaHook.Emulator.Components
 {
     public class JvsEmulator : IEmulatorComponent
     {
-        private const long INPUT_STATE_STRUCT_PTR_ADDRESS = 0x0000000140EDA330L;
-
-        private const long NETWORK_STATE_ADDRESS = 0x000000014CC95168L;
+        private const long INPUT_STATE_STRUCT_PTR_ADDRESS = 0x0000000140CEF5E0L;
 
         public JvsButtons JvsTappedState { get; private set; } = JvsButtons.JVS_NONE;
         public JvsButtons JvsDownState { get; private set; } = JvsButtons.JVS_NONE;
@@ -53,11 +51,6 @@ namespace DivaHook.Emulator.Components
             {
                 MemoryManipulator.WriteInt32(GetKeyDownStateAddress(), (int)JvsDownState);
                 MemoryManipulator.WriteInt32(GetKeyTappedStateAddress(), (int)JvsTappedState);
-            }
-
-            if (KeyConfig.SkipNetworkBinding.IsAnyTapped())
-            {
-                MemoryManipulator.WriteInt64(NETWORK_STATE_ADDRESS, -2);
             }
         }
 

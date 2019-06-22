@@ -1,0 +1,52 @@
+// patch.txt for Hatsune Miku Project DIVA Arcade Future Tone
+// Version 1.01.00
+// 2013-09-30T 11:31:51+09:00
+# file:			patch.txt
+# author:		rakisaionji
+# image_base:	0x140000C00
+
+// Address         : Length : Original bytes                : Patched bytes
+
+// Use GLUT_CURSOR_RIGHT_ARROW instead of GLUT_CURSOR_NONE
+0x0000000140063BCB : 0x0001 : 65                            : 00
+
+// Disable the keychip time bomb
+0x00000001400E7730 : 0x0006	: 40 53 48 83 EC 20				: B8 00 00 00 00 C3
+
+// Always return true for the SelCredit enter SelPv check
+0x000000014024E170 : 0x0006 : 40 53 48 83 EC 20             : B0 01 C3 90 90 90
+
+// Just completely ignore all SYSTEM_STARTUP errors
+0x0000000140290590 : 0x0001 : 40                            : C3
+
+// Always exit TASK_MODE_APP_ERROR on the first frame
+0x0000000140292567 : 0x0002 : 74 26                         : 90 90
+0x0000000140292583 : 0x0003 : 0F 45 CA                      : 89 D1 90
+
+// Ignore the EngineClear variable to clear the framebuffer at all resolutions
+0x000000014037E1A0 : 0x0002 : 74 10                         : 90 90
+0x000000014037E235 : 0x0002 : 74 2F                         : 90 90
+
+// Don't update the touch slider state so we can write our own
+0x000000014045003B : 0x0009 : 89 41 F4 8B 42 E0 89 41 F8 	: 90 90 90 8B 42 E0 90 90 90
+
+// Write ram files to the current directory instead of Y:/SBZV/ram
+0x0000000140499CF9 : 0x0003 : 0F 85 D7                      : E9 D8 00
+
+// *But of course we have a valid keychip*, return true
+0x000000014049B830 : 0x0006 : 0F B6 05 D3 FD A4             : B8 01 00 00 00 C3 
+
+// Skip parts of the network check state
+0x000000014049F600 : 0x0004 : 0F 85 2A 03 					: E9 2B 03 00
+
+// Set the initial DHCP WAIT timer value to 0
+0x00000001404A034E : 0x0002 : A0 8C                         : 00 00
+
+// Ignore SYSTEM_STARTUP Location Server checks
+0x00000001404A0F73 : 0x0002 : 75 0C                         : 90 90
+
+// Toon Shader Fix
+0x000000014037ED40 : 0x0002 : 74 13                         : 90 90 
+
+// Toon Shader Outline Fix
+0x0000000140479AE2 : 0x0001 : 00                            : 01

@@ -10,7 +10,7 @@ namespace DivaHook.Emulator.Components
     {
         public static readonly TimeSpan TouchSliderTappedThreshold = TimeSpan.FromMilliseconds(MS_PER_FRAME * 4.0);
 
-        private const long SLIDER_CTRL_TASK_OBJECT_ADDRESS = 0x000000014CC5DE40L;
+        private const long SLIDER_CTRL_TASK_OBJECT_ADDRESS = 0x0000000140EB3940L;
 
         private const int SLIDER_SENSOR_ON_THRESHOLD_COUNT = 35;
 

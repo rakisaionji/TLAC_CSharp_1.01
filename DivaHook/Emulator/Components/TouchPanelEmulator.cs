@@ -7,15 +7,11 @@ namespace DivaHook.Emulator.Components
 {
     public class TouchPanelEmulator : IEmulatorComponent
     {
-        private const int TOUCH_PANEL_NG = 4;
-
-        private const long TOUCH_PANEL_TASK_OBJECT_ADDRESS = 0x000000014CC9EC30L;
+        private const long TOUCH_PANEL_TASK_OBJECT_ADDRESS = 0x0000000140EF5200L;
 
         public KeyConfig KeyConfig { get; private set; }
 
         public MemoryManipulator MemoryManipulator { get; private set; }
-
-        private bool checkTouchPanelState = true;
 
         public TouchPanelEmulator(MemoryManipulator memoryManipulator, KeyConfig keyConfig)
         {
@@ -41,10 +37,9 @@ namespace DivaHook.Emulator.Components
         public void UpdateEmulatorTick(TimeSpan deltaTime)
         {
             // to not enable during SYSTEM STARTUP
-            if (checkTouchPanelState && MemoryManipulator.ReadInt32(GetConnectionStateAddress()) == TOUCH_PANEL_NG)
+            if (MemoryManipulator.ReadInt32(GetConnectionStateAddress()) != 1)
             {
                 MemoryManipulator.WriteInt32(GetConnectionStateAddress(), 1);
-                checkTouchPanelState = false;
             }
 
             if (Ds4Device.Instance.IsConnected && Ds4Device.Instance.IsTouched)
@@ -68,7 +63,7 @@ namespace DivaHook.Emulator.Components
             }
 
             // not sure what this is but it's zero checked before jumping to the TouchReaction function
-            MemoryManipulator.WriteSingle(TOUCH_PANEL_TASK_OBJECT_ADDRESS + 0x9CL, 1); 
+            MemoryManipulator.WriteSingle(TOUCH_PANEL_TASK_OBJECT_ADDRESS + 0x9CL, 1);
         }
 
         private long GetConnectionStateAddress()

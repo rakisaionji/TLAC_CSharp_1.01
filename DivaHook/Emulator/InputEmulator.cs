@@ -18,12 +18,6 @@ namespace DivaHook.Emulator
 
         public static readonly TimeSpan ProcessActiveCheckInterval = TimeSpan.FromMilliseconds(350.0);
 
-        private const long NETWORK_COUNTER_CHECK_ADDRESS = 0x000000014CC95140L;
-
-        private const long SYS_TIMER_OBJECT_ADDRESS = 0x000000014CC11960L;
-
-        private const int SYS_TIMER_TIME_FACTOR = 60;
-
         public bool LogToConsole { get; set; } = true;
 
         public bool UseCameraControls { get; set; } = false;
@@ -61,7 +55,6 @@ namespace DivaHook.Emulator
                 new CoinEmulator(MemoryManipulator, KeyConfig),
                 new TouchSliderEmulator(MemoryManipulator, KeyConfig),
                 new TouchPanelEmulator(MemoryManipulator, KeyConfig),
-                new StageManager(MemoryManipulator, KeyConfig),
             };
 
             CameraController = new CameraController(MemoryManipulator, KeyConfig);
@@ -169,29 +162,19 @@ namespace DivaHook.Emulator
 
         private void InitializeDivaMemory()
         {
-            // FREE PLAY
-            //MemoryManipulator.WriteByte(0x14066E878, 1); 
-
-            // skip DHCP timer
-            if (MemoryManipulator.ReadInt32(NETWORK_COUNTER_CHECK_ADDRESS) == 1)
-                MemoryManipulator.WriteInt32(NETWORK_COUNTER_CHECK_ADDRESS, 2);
-
             foreach (var emulator in emulatorComponents)
                 emulator.InitializeDivaMemory();
 
             // sys_timer
             {
-                const int SYS_TIMER_TIME = 39 * SYS_TIMER_TIME_FACTOR;
-                MemoryManipulator.WriteInt32(GetSysTimerTimeAddress(), SYS_TIMER_TIME);
+                // 0x0000000140411F0F:  mov qword ptr [r12+8C8h], 3600
+                MemoryManipulator.WriteInt32(0x140411F17L, 39 * 60);
 
-                // 0x00000001405C5143:  mov qword ptr [rsi+0B38h], 3600
-                MemoryManipulator.WriteInt32(0x1405C514AL, SYS_TIMER_TIME);
+                // 0x000000014040BEAF:  dec dword ptr [rbx+8C8h]
+                MemoryManipulator.Write(0x14040BEAFL, Assembly.GetNopInstructions(6));
 
-                // 0x00000001405BDFBF:  dec dword ptr [rbx+0B38h]
-                MemoryManipulator.Write(0x1405BDFBFL, Assembly.GetNopInstructions(6));
-
-                // 0x00000001405C517A:  mov [rsi+0B38h], ecx
-                MemoryManipulator.Write(0x1405C517AL, Assembly.GetNopInstructions(6));
+                // 0x0000000140407976:  mov [rcx+8C8h], eax
+                MemoryManipulator.Write(0x140407976L, Assembly.GetNopInstructions(6));
             }
         }
 
@@ -213,11 +196,6 @@ namespace DivaHook.Emulator
             previousConsoleBuffer.Clear();
             previousConsoleBuffer = new StringBuilder(consoleBuffer.ToString());
             consoleBuffer.Clear();
-        }
-
-        private long GetSysTimerTimeAddress()
-        {
-            return SYS_TIMER_OBJECT_ADDRESS + 0xB38;
         }
 
         private void ToggleCameraControls()

@@ -10,20 +10,9 @@ namespace DivaHook.Injection
 {
     public sealed class InjectionEntryPoint : IEntryPoint
     {
-        private const long POLL_INPUT_FUNC_ADDRESS = 0x14018CC40L;
+        private const long ENGINE_UPDATE_HOOK_TARGET_ADDRESS = 0x000000014005D440L;
 
-        private const long LOG_FUNC_ADDRESS = 0x1403F2620L;
-
-        private const long LOG_GAME_STATE_ADDRESS = 0x14017B760L;
-
-        private const long GLUT_SET_CURSOR_ADDRESS = 0x1408B68E6L;
-
-        private const long TOUCH_REACTION_PLAY_TOUCH_EFF_ADDRESS = 0x1406A1F90L;
-
-        private const long RESOLUTION_ADDRESS = 0x140EDA8BCL;
-
-        private const float DEFAULT_RESOLUTION_WIDTH = 1280f;
-        private const float DEFAULT_RESOLUTION_HEIGHT = 720f;
+        private const long GLUT_SET_CURSOR_ADDRESS = 0x000000014073261CL;
 
         private InputEmulator emulator = null;
 
@@ -35,11 +24,7 @@ namespace DivaHook.Injection
 
         private int performanceCounter = 0;
 
-        private float resolutionFactorX = 1f;
-        private float resolutionFactorY = 1f;
-        
         private bool checkSetCursor = true;
-        private bool checkResolution = true;
 
         internal static void ShowCursor() => GlutSetCursor(GlutCursor.GLUT_CURSOR_RIGHT_ARROW);
 
@@ -61,24 +46,9 @@ namespace DivaHook.Injection
             List<LocalHook> hooks = new List<LocalHook>()
             {
                 LocalHook.Create(
-                    new IntPtr(POLL_INPUT_FUNC_ADDRESS),
+                    new IntPtr(ENGINE_UPDATE_HOOK_TARGET_ADDRESS),
                     new VoidDelegate(PollInputOverride),
                     this),
-
-                LocalHook.Create(
-                    new IntPtr(TOUCH_REACTION_PLAY_TOUCH_EFF_ADDRESS),
-                    new PlayAetTouchEffDelegate(PlayAetTouchEffOverride),
-                    this),
-
-                //LocalHook.Create(
-                //    new IntPtr(LOG_FUNC_ADDRESS),
-                //    new LogDelegate(LogOverride),
-                //    this),
-
-                //LocalHook.Create(
-                //    new IntPtr(LOG_GAME_STATE_ADDRESS),
-                //    new LogGameStateDelegate(LogGameStateOverride),
-                //    this),
             };
 
             foreach (var hook in hooks)
@@ -129,30 +99,13 @@ namespace DivaHook.Injection
             LocalHook.Release();
         }
 
-        #region Delegate Declarations
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         private delegate void VoidDelegate();
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         private delegate void GlutSetCursorDelegate(GlutCursor cursor);
 
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi, SetLastError = true)]
-        private delegate void LogDelegate(long unk0, string formatString, string format, long unk1, long unk2, long unk3, long unk4);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi, SetLastError = true)]
-        private delegate void LogGameStateDelegate(long formatString, long length, long format0, long format1);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi, SetLastError = true)]
-        private delegate void PlayAetTouchEffDelegate(long touchReactionPtr, long position);
-        #endregion
-
-        #region Delegate Instances
         private static readonly GlutSetCursorDelegate GlutSetCursor = GetDelegateForFunctionPointer<GlutSetCursorDelegate>(GLUT_SET_CURSOR_ADDRESS);
-
-        private static readonly LogGameStateDelegate LogGameState = GetDelegateForFunctionPointer<LogGameStateDelegate>(LOG_GAME_STATE_ADDRESS);
-
-        private static readonly PlayAetTouchEffDelegate PlayAetTouchEff = GetDelegateForFunctionPointer<PlayAetTouchEffDelegate>(TOUCH_REACTION_PLAY_TOUCH_EFF_ADDRESS);
-        #endregion
 
         #region Overrides
         private void PollInputOverride()
@@ -197,48 +150,6 @@ namespace DivaHook.Injection
                 //server.ReportMessage($"{performanceWatch.Elapsed.TotalMilliseconds}ms");
                 performanceCounter = 0;
             }
-        }
-
-        private void LogOverride(long unk0, string formatString, string format, long unk1, long unk2, long unk3, long unk4)
-        {
-            if (unk3 == -2)
-                formatString = Sprintf(formatString, format);
-
-            server.ReportString(formatString);
-        }
-
-        private void LogGameStateOverride(long formatString, long length, long format0, long format1)
-        {
-            //server.ReportMessage($"{unk0}, {unk1}, {unk2}");
-            //server.ReportString(formatString);
-            server.ReportMessage($"LogGameStateOverride(): test");
-
-            LogGameState(formatString, length, format0, format1);
-        }
-
-        private unsafe void PlayAetTouchEffOverride(long touchReactionPtr, long position)
-        {
-            if (checkResolution)
-            {
-                checkResolution = false;
-
-                int width = emulator.MemoryManipulator.ReadInt32(RESOLUTION_ADDRESS);
-                int height = emulator.MemoryManipulator.ReadInt32(RESOLUTION_ADDRESS + sizeof(int));
-
-                resolutionFactorX = DEFAULT_RESOLUTION_WIDTH / width;
-                resolutionFactorY = DEFAULT_RESOLUTION_HEIGHT / height;
-            }
-
-            float x = *((float*)&position + 0);
-            float y = *((float*)&position + 1);
-
-            x *= resolutionFactorX;
-            y *= resolutionFactorY;
-
-            *((int*)&position + 0) = *(int*)&x;
-            *((int*)&position + 1) = *(int*)&y;
-
-            PlayAetTouchEff(touchReactionPtr, position);
         }
         #endregion
     }

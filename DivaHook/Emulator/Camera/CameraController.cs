@@ -10,15 +10,15 @@ namespace DivaHook.Emulator.Camera
 {
     public class CameraController
     {
-        private const long CAMERA_OBJECT_ADDRESS = 0x0000000140FBC2C0L;
+        private const long CAMERA_OBJECT_ADDRESS = 0x0000000140D9CD40L;
 
-        private const long CAMERA_COORDINATES_UPDATE_FUNC_ADDRESS = 0x00000001401F9460L;
+        private const long CAMERA_COORDINATES_UPDATE_FUNC_ADDRESS = 0x00000001400D1110L;
 
-        private const long CAMERA_FOCUS_COORDINATES_UPDATE_FUNC_ADDRESS = 0x00000001401F93F0L;
+        private const long CAMERA_FOCUS_COORDINATES_UPDATE_FUNC_ADDRESS = 0x00000001400D10B0L;
 
-        private const long CAMERA_SLANT_UPDATE_FUNC_ADDRESS = 0x00000001401F9480L;
+        private const long CAMERA_SLANT_UPDATE_FUNC_ADDRESS = 0x00000001400D1130L;
 
-        private const long CAMERA_FOV_UPDATE_FUNC_ADDRESS = 0x00000001401F9430L;
+        private const long CAMERA_FOV_UPDATE_FUNC_ADDRESS = 0x00000001400D10F0L;
 
         private const float DEFAULT_FOV = 90f;
 
@@ -166,7 +166,7 @@ namespace DivaHook.Emulator.Camera
             Vector2 focus = cameraPosition + MathHelper.PointFromAngle(CameraVerticalRotation, 1f);
             CameraData.FocusX = focus.X;
             CameraData.FocusZ = focus.Y;
-            
+
             CameraData.FocusHeight = CameraData.Height + MathHelper.PointFromAngle(CameraHorizontalRotation, 1f).X;
 
             CameraData.Slant = CameraSlant;
