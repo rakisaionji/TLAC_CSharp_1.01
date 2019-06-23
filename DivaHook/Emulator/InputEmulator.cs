@@ -54,6 +54,7 @@ namespace DivaHook.Emulator
             emulatorComponents = new IEmulatorComponent[]
             {
                 JVSEmulator = new JvsEmulator(MemoryManipulator, KeyConfig),
+                new CoinEmulator(MemoryManipulator, KeyConfig),
                 new FastLoader(MemoryManipulator, KeyConfig),
                 new PlayerDataManager(MemoryManipulator, PlayerConfig),
                 new PvModuleManager(MemoryManipulator, KeyConfig),
