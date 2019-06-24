@@ -23,7 +23,12 @@ namespace DivaHook.Emulator.Components
         private const long PLAYER_RANK_DISP_ADDRESS = PLAYER_DATA_ADDRESS + 0x9A4L; // interim_ranking_disp_flag
 
         private const long SET_DEFAULT_PLAYER_DATA_ADDRESS = 0x000000014033F5F0L;
-        // private const long MODSELECTOR_CHECK_FUNCTION_ERRRET_ADDRESS = 0x0000000140??????L;
+        private const long MODSELECTOR_SET_MODULE_ADDRESS = 0x00000001403F27CEL;
+        private const long MODSELECTOR_SET_ITEM_A_ADDRESS = 0x00000001403F2BC4L;
+        private const long MODSELECTOR_SET_ITEM_B_ADDRESS = 0x00000001403F3AA3L;
+        private const long MODSELECTOR_SET_ITEM_C_ADDRESS = 0x00000001403F3594L;
+        private const long MODSELECTOR_SET_ITEM_D_ADDRESS = 0x00000001403F3842L;
+        private const long MODSELECTOR_MISC_CHECK_ADDRESS = 0x00000001403F2332L;
         private const long MODSELECTOR_CLOSE_AFTER_MODULE = 0x00000001403F3F99L;
         private const long MODSELECTOR_CLOSE_AFTER_CUSTOMIZE = 0x00000001403F3E53L;
 
@@ -74,16 +79,24 @@ namespace DivaHook.Emulator.Components
         {
             // Prevent the PlayerData from being reset so we don't need to keep updating the PlayerData struct
             MemoryManipulator.WritePatch(SET_DEFAULT_PLAYER_DATA_ADDRESS, new byte[] { 0xC3 }); // ret
-            // Allow player to select the module and extra item (by vladkorotnev)
-            // MemoryManipulator.WritePatch(MODSELECTOR_CHECK_FUNCTION_ERRRET_ADDRESS, new byte[] { 0xB0, 0x01 }); // xor al,al -> ld al,1
-            // Fix annoying behavior of closing after changing module or item  (by vladkorotnev)
+            // Allow player to select the module
+            MemoryManipulator.WritePatch(MODSELECTOR_SET_MODULE_ADDRESS, new byte[] { 0xB0, 0x01 }); // test al, al --> mov al, 1
+            MemoryManipulator.WritePatchNop(MODSELECTOR_SET_MODULE_ADDRESS + 0x2L, 0x34); // nop
+            // Allow player to select extra item
+            MemoryManipulator.WritePatch(MODSELECTOR_SET_ITEM_A_ADDRESS, new byte[] { 0xB0, 0x01 }); // test al, al --> mov al, 1
+            MemoryManipulator.WritePatchNop(MODSELECTOR_SET_ITEM_A_ADDRESS + 0x2L, 0x32); // nop
+            MemoryManipulator.WritePatch(MODSELECTOR_SET_ITEM_B_ADDRESS, new byte[] { 0xB0, 0x01 }); // test al, al --> mov al, 1
+            MemoryManipulator.WritePatchNop(MODSELECTOR_SET_ITEM_B_ADDRESS + 0x2L, 0x32); // nop
+            MemoryManipulator.WritePatch(MODSELECTOR_SET_ITEM_C_ADDRESS, new byte[] { 0xB0, 0x01 }); // test al, al --> mov al, 1
+            MemoryManipulator.WritePatchNop(MODSELECTOR_SET_ITEM_C_ADDRESS + 0x2L, 0x35); // nop
+            MemoryManipulator.WritePatch(MODSELECTOR_SET_ITEM_D_ADDRESS, new byte[] { 0xB0, 0x01 }); // test al, al --> mov al, 1
+            MemoryManipulator.WritePatchNop(MODSELECTOR_SET_ITEM_D_ADDRESS + 0x2L, 0x34); // nop
+            // Some miscellaneous check
+            MemoryManipulator.WritePatch(MODSELECTOR_MISC_CHECK_ADDRESS, new byte[] { 0xB0, 0x01 }); // test al, al --> mov al, 1
+            MemoryManipulator.WritePatchNop(MODSELECTOR_MISC_CHECK_ADDRESS + 0x2L, 0x32); // nop
+            // Fix annoying behavior of closing after changing module or item
             MemoryManipulator.WritePatch(MODSELECTOR_CLOSE_AFTER_MODULE, new byte[] { 0x85 }); // je --> jne
             MemoryManipulator.WritePatch(MODSELECTOR_CLOSE_AFTER_CUSTOMIZE, new byte[] { 0x85 }); // je --> jne
-            // Display clear borders on the progress bar (by vladkorotnev)
-            MemoryManipulator.WriteByte(PLAYER_DATA_ADDRESS + 0xD94, 0x3);
-            // Enable module selection without card (by lybxlpsv) [ WIP / NG ]
-            // MemoryManipulator.WritePatch(0x00000001405C5133, new byte[] { 0x74 });
-            // MemoryManipulator.WritePatch(0x00000001405BC8E7, new byte[] { 0x74 });
         }
 
         public void InitializeDivaMemory()

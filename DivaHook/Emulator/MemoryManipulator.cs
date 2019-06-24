@@ -243,6 +243,18 @@ namespace DivaHook.Emulator
             VirtualProtect((IntPtr)address, (uint)value.Length, oldProtect, out bck);
         }
 
+        public void WritePatchNop(long address, int length)
+        {
+            if (!IsAttached || address <= 0)
+                return;
+
+            uint oldProtect, bck;
+
+            VirtualProtect((IntPtr)address, (uint)length, PAGE_EXECUTE_READWRITE, out oldProtect);
+            Write(address, Assembly.GetNopInstructions(length));
+            VirtualProtect((IntPtr)address, (uint)length, oldProtect, out bck);
+        }
+
         public void WriteByte(long address, byte value)
         {
             if (!IsAttached || address <= 0)

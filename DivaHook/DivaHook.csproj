@@ -56,6 +56,7 @@
     <Compile Include="Emulator\Assembly.cs" />
     <Compile Include="Emulator\Camera\CameraController.cs" />
     <Compile Include="Emulator\Camera\CameraData.cs" />
+    <Compile Include="Emulator\Components\CoinEmulator.cs" />
     <Compile Include="Emulator\Components\FastLoader.cs" />
     <Compile Include="Emulator\Components\GameState.cs" />
     <Compile Include="Emulator\Components\PlayerDataManager.cs" />
